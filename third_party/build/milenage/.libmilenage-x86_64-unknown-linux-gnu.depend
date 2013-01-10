@@ -1,0 +1,10 @@
+output/libmilenage-x86_64-unknown-linux-gnu/milenage.o: ../../milenage/milenage.c ../../milenage/milenage.h \
+ ../../milenage/rijndael.h
+output/libmilenage-x86_64-unknown-linux-gnu/rijndael.o: ../../milenage/rijndael.c ../../../pjlib/include/pj/types.h \
+ ../../../pjlib/include/pj/config.h \
+ ../../../pjlib/include/pj/compat/cc_gcc.h \
+ ../../../pjlib/include/pj/compat/os_auto.h \
+ ../../../pjlib/include/pj/compat/m_auto.h \
+ ../../../pjlib/include/pj/compat/size_t.h \
+ /usr/lib/gcc/x86_64-linux-gnu/4.7/include/stddef.h \
+ ../../../pjlib/include/pj/config_site.h
