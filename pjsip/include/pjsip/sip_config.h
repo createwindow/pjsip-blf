@@ -937,6 +937,9 @@ PJ_INLINE(pjsip_cfg_t*) pjsip_cfg(void)
 #   define PJSIP_PRES_DEFAULT_EXPIRES		600
 #endif
 
+#ifndef PJSIP_BLF_DEFAULT_EXPIRES
+#   define PJSIP_BLF_DEFAULT_EXPIRES       600
+#endif
 
 /**
  * Specify the status code value to respond to bad message body in NOTIFY
@@ -953,6 +956,11 @@ PJ_INLINE(pjsip_cfg_t*) pjsip_cfg(void)
  */
 #ifndef PJSIP_PRES_BAD_CONTENT_RESPONSE
 #   define PJSIP_PRES_BAD_CONTENT_RESPONSE	488
+#endif
+
+
+#ifndef PJSIP_BLF_BAD_CONTENT_RESPONSE
+#   define PJSIP_BLF_BAD_CONTENT_RESPONSE  488
 #endif
 
 

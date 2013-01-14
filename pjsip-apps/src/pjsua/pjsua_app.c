@@ -3081,6 +3081,49 @@ static void on_buddy_state(pjsua_buddy_id buddy_id)
 
 
 /*
+ * Handler on buddy blf state changed.
+ */
+static void on_buddy_blf_state(pjsua_buddy_id buddy_id)
+{
+    pjsua_buddy_blf_info info;
+    pjsua_buddy_get_blf_info(buddy_id, &info);
+
+    PJ_LOG(3,(THIS_FILE, "%.*s dialog-info-entity: %.*s, dialog-id: %.*s, dialog-call-id: %.*s, "
+            "dialog-remote-tag: %.*s, dialog-direction: %.*s, dialog-state: %.*s, "
+            "dialog-duration: %.*s, local-identity: %.*s, local-target-uri: %.*s, "
+            "remote-identity: %.*s, remote-target-uri: %.*s, subscription blf state: %s, "
+             "(last termination reason code=%d %.*s)",
+          (int)info.uri.slen,
+          info.uri.ptr,
+          (int)info.dialog_info_entity.slen,
+          info.dialog_info_entity.ptr,
+          (int)info.dialog_id.slen,
+          info.dialog_id.ptr,
+          (int)info.dialog_call_id.slen,
+          info.dialog_call_id.ptr,
+          (int)info.dialog_remote_tag.slen,
+          info.dialog_remote_tag.ptr,
+          (int)info.dialog_direction.slen,
+          info.dialog_direction.ptr,
+          (int)info.dialog_state.slen,
+          info.dialog_state.ptr,
+          (int)info.dialog_duration.slen,
+          info.dialog_duration.ptr,
+          (int)info.local_identity.slen,
+          info.local_identity.ptr,
+          (int)info.local_target_uri.slen,
+          info.local_target_uri.ptr,
+          (int)info.remote_identity.slen,
+          info.remote_identity.ptr,
+          (int)info.remote_target_uri.slen,
+          info.remote_target_uri.ptr,
+          info.sub_state_name,
+          info.sub_term_code,
+          (int)info.sub_term_reason.slen,
+          info.sub_term_reason.ptr));
+}
+
+/*
  * Subscription state has changed.
  */
 static void on_buddy_evsub_state(pjsua_buddy_id buddy_id,
@@ -3110,11 +3153,37 @@ static void on_buddy_evsub_state(pjsua_buddy_id buddy_id,
 
 }
 
+static void on_buddy_evsub_blf_state(pjsua_buddy_id buddy_id,
+                 pjsip_evsub *sub,
+                 pjsip_event *event)
+{
+    char event_info[80];
+
+    PJ_UNUSED_ARG(sub);
+
+    event_info[0] = '\0';
+
+    if (event->type == PJSIP_EVENT_TSX_STATE &&
+        event->body.tsx_state.type == PJSIP_EVENT_RX_MSG)
+    {
+        pjsip_rx_data *rdata = event->body.tsx_state.src.rdata;
+        snprintf(event_info, sizeof(event_info),
+             " (RX %s)",
+             pjsip_rx_data_get_info(rdata));
+    }
+
+    PJ_LOG(4,(THIS_FILE,
+          "Buddy %d: blf subscription state: %s (event: %s%s)",
+          buddy_id, pjsip_evsub_get_blf_state_name(sub),
+          pjsip_event_str(event->type),
+          event_info));
+}
+
 
 /**
  * Incoming IM message (i.e. MESSAGE request)!
  */
-static void on_pager(pjsua_call_id call_id, const pj_str_t *from, 
+static void on_pager(pjsua_call_id call_id, const pj_str_t *from,
 		     const pj_str_t *to, const pj_str_t *contact,
 		     const pj_str_t *mime_type, const pj_str_t *text)
 {
@@ -3540,6 +3609,7 @@ static void keystroke_help(void)
     puts("|  a  Answer call              |  i  Send IM              | !a  Modify accnt. |");
     puts("|  h  Hangup call  (ha=all)    |  s  Subscribe presence   | rr  (Re-)register |");
     puts("|  H  Hold call                |  u  Unsubscribe presence | ru  Unregister    |");
+    puts("|                              | +d  Subscribe blf        |                   |");
     puts("|  v  re-inVite (release hold) |  t  ToGgle Online status |  >  Cycle next ac.|");
     puts("|  U  send UPDATE              |  T  Set online status    |  <  Cycle prev ac.|");
     puts("| ],[ Select next/prev call    +--------------------------+-------------------+");
@@ -4748,8 +4818,31 @@ void console_app_main(const pj_str_t *uri_to_call)
 		    pjsua_perror(THIS_FILE, "Error adding new account", status);
 		}
 
-	    } else {
-		printf("Invalid input %s\n", menuin);
+	    } else if (menuin[1] == 'd') {
+            pjsua_buddy_config buddy_cfg;
+            pjsua_buddy_id buddy_id;
+            pj_status_t status;
+
+            if (!simple_input("Enter buddy's URI:", buf, sizeof(buf)))
+                break;
+
+            if (pjsua_verify_url(buf) != PJ_SUCCESS) {
+                printf("Invalid URI '%s'\n", buf);
+                break;
+            }
+
+            pj_bzero(&buddy_cfg, sizeof(pjsua_buddy_config));
+
+            buddy_cfg.uri = pj_str(buf);
+            buddy_cfg.subscribe = PJ_TRUE;
+
+            status = pjsua_buddy_add_blf(&buddy_cfg, &buddy_id);
+            if (status == PJ_SUCCESS) {
+                printf("New buddy '%s' added at index %d\n",
+                   buf, buddy_id+1);
+            }
+        } else {
+		  printf("Invalid input %s\n", menuin);
 	    }
 	    break;
 
@@ -5561,6 +5654,7 @@ pj_status_t app_init(int argc, char *argv[])
     app_config.cfg.cb.on_reg_state = &on_reg_state;
     app_config.cfg.cb.on_incoming_subscribe = &on_incoming_subscribe;
     app_config.cfg.cb.on_buddy_state = &on_buddy_state;
+    app_config.cfg.cb.on_buddy_blf_state = &on_buddy_blf_state;
     app_config.cfg.cb.on_buddy_evsub_state = &on_buddy_evsub_state;
     app_config.cfg.cb.on_pager = &on_pager;
     app_config.cfg.cb.on_typing = &on_typing;
