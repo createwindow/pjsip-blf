@@ -572,7 +572,6 @@ PJ_DECL(void) pjdialog_info_dialog_info_set_entity(pj_pool_t *pool,
 PJ_DECL(pjdialog_info_dialog*) pjdialog_info_dialog_info_get_dialog(pjdialog_info_dialog_info *dialog_info)
 {
     pjdialog_info_dialog *dialog = (pjdialog_info_dialog*)pj_xml_find_node(dialog_info, &DIALOG);
-    pj_assert(dialog);
     return dialog;
 }
 
