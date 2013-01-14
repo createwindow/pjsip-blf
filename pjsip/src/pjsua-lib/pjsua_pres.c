@@ -349,7 +349,7 @@ PJ_DEF(pj_status_t) pjsua_buddy_get_blf_info( pjsua_buddy_id buddy_id,
     total += info->uri.slen;
 
     if (pjsua_var.buddy[buddy_id].blf_status.info[0].dialog_node) {
-+        info->dialog_info_entity.ptr = info->buf_ + total;
+        info->dialog_info_entity.ptr = info->buf_ + total;
         pj_strncpy(&info->dialog_info_entity, &pjsua_var.buddy[buddy_id].blf_status.info[0].dialog_info_entity, pjsua_var.buddy[buddy_id].blf_status.info[0].dialog_info_entity.slen);
         total += info->dialog_info_entity.slen;
 
@@ -783,6 +783,55 @@ PJ_DEF(pj_status_t) pjsua_buddy_del(pjsua_buddy_id buddy_id)
     return PJ_SUCCESS;
 }
 
+/*
+ * Delete blf buddy.
+ */
+PJ_DEF(pj_status_t) pjsua_buddy_del_blf(pjsua_buddy_id buddy_id)
+{
+    struct buddy_lock lck;
+    pj_status_t status;
+
+    PJ_ASSERT_RETURN(buddy_id>=0 &&
+			buddy_id<(int)PJ_ARRAY_SIZE(pjsua_var.buddy),
+		     PJ_EINVAL);
+
+    if (pjsua_var.buddy[buddy_id].uri.slen == 0) {
+	return PJ_SUCCESS;
+    }
+
+    status = lock_buddy("pjsua_buddy_del_blf()", buddy_id, &lck, 0);
+    if (status != PJ_SUCCESS)
+	return status;
+
+    PJ_LOG(4,(THIS_FILE, "BLF buddy %d: deleting..", buddy_id));
+    pj_log_push_indent();
+
+    /* Unsubscribe blf */
+    pjsua_buddy_subscribe_blf(buddy_id, PJ_FALSE);
+
+    /* Not interested with further events for this buddy */
+    if (pjsua_var.buddy[buddy_id].sub) {
+	pjsip_evsub_set_mod_data(pjsua_var.buddy[buddy_id].sub,
+				 pjsua_var.mod.id, NULL);
+    }
+
+    /* Remove blf buddy */
+    pjsua_var.buddy[buddy_id].uri.slen = 0;
+    pjsua_var.buddy_cnt--;
+
+    /* Clear timer */
+    if (pjsua_var.buddy[buddy_id].timer.id) {
+	pjsua_cancel_timer(&pjsua_var.buddy[buddy_id].timer);
+	pjsua_var.buddy[buddy_id].timer.id = PJ_FALSE;
+    }
+
+    /* Reset blf buddy struct */
+    reset_buddy(buddy_id);
+
+    unlock_buddy(&lck);
+    pj_log_pop_indent();
+    return PJ_SUCCESS;
+}
 
 /*
  * Enable/disable buddy's presence monitoring.

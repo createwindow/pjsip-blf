@@ -3610,6 +3610,7 @@ static void keystroke_help(void)
     puts("|  h  Hangup call  (ha=all)    |  s  Subscribe presence   | rr  (Re-)register |");
     puts("|  H  Hold call                |  u  Unsubscribe presence | ru  Unregister    |");
     puts("|                              | +d  Subscribe blf        |                   |");
+    puts("|                              | -d  Subscribe blf        |                   |");
     puts("|  v  re-inVite (release hold) |  t  ToGgle Online status |  >  Cycle next ac.|");
     puts("|  U  send UPDATE              |  T  Set online status    |  <  Cycle prev ac.|");
     puts("| ],[ Select next/prev call    +--------------------------+-------------------+");
@@ -4847,7 +4848,19 @@ void console_app_main(const pj_str_t *uri_to_call)
 	    break;
 
 	case '-':
-	    if (menuin[1] == 'b') {
+            if (menuin[1] == 'd') {
+		if (!simple_input("Enter blf buddy ID to delete",buf,sizeof(buf)))
+		    break;
+
+		i = my_atoi(buf) - 1;
+
+		if (!pjsua_buddy_is_valid(i)) {
+		    printf("Invalid buddy id %d\n", i);
+		} else {
+		    pjsua_buddy_del_blf(i);
+		    printf("BLF buddy %d deleted\n", i);
+                }
+            } else if (menuin[1] == 'b') {
 		if (!simple_input("Enter buddy ID to delete",buf,sizeof(buf)))
 		    break;
 
