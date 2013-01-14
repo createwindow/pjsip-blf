@@ -371,6 +371,10 @@ PJ_DEF(pj_status_t) pjsua_buddy_get_blf_info( pjsua_buddy_id buddy_id,
         pj_strncpy(&info->dialog_remote_tag, &pjsua_var.buddy[buddy_id].blf_status.info[0].dialog_remote_tag, sizeof(info->buf_)-total);
         total += info->dialog_remote_tag.slen;
 
+        info->dialog_local_tag.ptr = info->buf_ + total;
+        pj_strncpy(&info->dialog_local_tag, &pjsua_var.buddy[buddy_id].blf_status.info[0].dialog_local_tag, sizeof(info->buf_)-total);
+        total += info->dialog_local_tag.slen;
+
         info->dialog_direction.ptr = info->buf_ + total;
         pj_strncpy(&info->dialog_direction, &pjsua_var.buddy[buddy_id].blf_status.info[0].dialog_direction, sizeof(info->buf_)-total);
         total += info->dialog_direction.slen;

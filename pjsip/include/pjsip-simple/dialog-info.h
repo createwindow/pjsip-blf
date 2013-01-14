@@ -84,6 +84,9 @@ typedef struct pjdialog_info_dialog_op
     const pj_str_t* (*get_remote_tag)(const pjdialog_info_dialog*);
     void (*set_remote_tag)(pj_pool_t *pool, const pjdialog_info_dialog*, const pj_str_t*);
 
+    const pj_str_t* (*get_local_tag)(const pjdialog_info_dialog*);
+    void (*set_local_tag)(pj_pool_t *pool, const pjdialog_info_dialog*, const pj_str_t*);
+
     const pj_str_t* (*get_direction)(const pjdialog_info_dialog*);
     void (*set_direction)(pj_pool_t *pool, const pjdialog_info_dialog*, const pj_str_t*);
 
@@ -183,6 +186,11 @@ PJ_DECL(const pj_str_t*) pjdialog_info_dialog_get_remote_tag(const pjdialog_info
 PJ_DECL(void)        pjdialog_info_dialog_set_remote_tag(pj_pool_t *pool,
                             pjdialog_info_dialog *dialog,
                             const pj_str_t *remote_tag);
+
+PJ_DECL(const pj_str_t*) pjdialog_info_dialog_get_local_tag(const pjdialog_info_dialog *dialog);
+PJ_DECL(void)        pjdialog_info_dialog_set_local_tag(pj_pool_t *pool,
+                            pjdialog_info_dialog *dialog,
+                            const pj_str_t *local_tag);
 
 PJ_DECL(const pj_str_t*) pjdialog_info_dialog_get_direction(const pjdialog_info_dialog *dialog);
 PJ_DECL(void)        pjdialog_info_dialog_set_direction(pj_pool_t *pool,

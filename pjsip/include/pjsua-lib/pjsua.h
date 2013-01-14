@@ -4719,6 +4719,9 @@ typedef struct pjsua_buddy_blf_info
     /* BLF Dialog remote_tag */
     pj_str_t        dialog_remote_tag;
 
+    /* BLF Dialog local_tag */
+    pj_str_t        dialog_local_tag;
+
     /* BLF Dialog direction */
     pj_str_t        dialog_direction;
 

@@ -82,6 +82,7 @@ struct pjsip_blf_status
             pj_str_t   dialog_info_entity;       /**< Dialog-Info entity              */
             pj_str_t   dialog_call_id;          /**< Dialog's call_id      */
             pj_str_t   dialog_remote_tag;       /**< Dialog's remote-tag      */
+            pj_str_t   dialog_local_tag;       /**< Dialog's local-tag      */
             pj_str_t   dialog_direction;        /**< Dialog's direction      */
             pj_str_t   dialog_id;               /**< Dialog's id      */
             pj_str_t   dialog_state;            /**< Dialog state              */

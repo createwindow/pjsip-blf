@@ -42,6 +42,8 @@ struct pjdialog_info_op_desc pjdialog_info_op =
     &pjdialog_info_dialog_set_call_id,
     &pjdialog_info_dialog_get_remote_tag,
     &pjdialog_info_dialog_set_remote_tag,
+    &pjdialog_info_dialog_get_local_tag,
+    &pjdialog_info_dialog_set_local_tag,
     &pjdialog_info_dialog_get_direction,
     &pjdialog_info_dialog_set_direction,
     &pjdialog_info_dialog_get_state,
@@ -89,6 +91,7 @@ static pj_str_t CALL_ID = { "call-id", 7 };
 static pj_str_t ENTITY = { "entity", 6 };
 static pj_str_t DIRECTION = { "direction", 9 };
 static pj_str_t REMOTE_TAG = { "remote-tag", 10 };
+static pj_str_t LOCAL_TAG = { "local-tag", 9 };
 static pj_str_t EMPTY_STRING = { NULL, 0 };
 
 static pj_str_t XMLNS = { "xmlns", 5 };
@@ -374,8 +377,9 @@ PJ_DECL(void) pjdialog_info_dialog_set_call_id(pj_pool_t *pool,
 PJ_DECL(const pj_str_t*) pjdialog_info_dialog_get_remote_tag(const pjdialog_info_dialog *dialog)
 {
     const pj_xml_attr *attr = pj_xml_find_attr((pj_xml_node*)dialog, &REMOTE_TAG, NULL);
-    pj_assert(attr);
-    return &attr->value;
+    if (attr)
+        return &attr->value;
+    return &EMPTY_STRING;
 }
 
 PJ_DECL(void) pjdialog_info_dialog_set_remote_tag(pj_pool_t *pool,
@@ -385,6 +389,23 @@ PJ_DECL(void) pjdialog_info_dialog_set_remote_tag(pj_pool_t *pool,
     pj_xml_attr *attr = pj_xml_find_attr(dialog, &REMOTE_TAG, NULL);
     pj_assert(attr);
     pj_strdup(pool, &attr->value, remote_tag);
+}
+
+PJ_DECL(const pj_str_t*) pjdialog_info_dialog_get_local_tag(const pjdialog_info_dialog *dialog)
+{
+    const pj_xml_attr *attr = pj_xml_find_attr((pj_xml_node*)dialog, &LOCAL_TAG, NULL);
+    if (attr)
+        return &attr->value;
+    return &EMPTY_STRING;
+}
+
+PJ_DECL(void) pjdialog_info_dialog_set_local_tag(pj_pool_t *pool,
+                            pjdialog_info_dialog *dialog,
+                            const pj_str_t *local_tag)
+{
+    pj_xml_attr *attr = pj_xml_find_attr(dialog, &LOCAL_TAG, NULL);
+    pj_assert(attr);
+    pj_strdup(pool, &attr->value, local_tag);
 }
 
 PJ_DECL(const pj_str_t*) pjdialog_info_dialog_get_direction(const pjdialog_info_dialog *dialog)
