@@ -361,8 +361,9 @@ PJ_DECL(void) pjdialog_info_dialog_set_id(pj_pool_t *pool,
 PJ_DECL(const pj_str_t*) pjdialog_info_dialog_get_call_id(const pjdialog_info_dialog *dialog)
 {
     const pj_xml_attr *attr = pj_xml_find_attr((pj_xml_node*)dialog, &CALL_ID, NULL);
-    pj_assert(attr);
-    return &attr->value;
+    if (attr)
+        return &attr->value;
+    return &EMPTY_STRING;
 }
 
 PJ_DECL(void) pjdialog_info_dialog_set_call_id(pj_pool_t *pool,
@@ -370,8 +371,13 @@ PJ_DECL(void) pjdialog_info_dialog_set_call_id(pj_pool_t *pool,
                             const pj_str_t *call_id)
 {
     pj_xml_attr *attr = pj_xml_find_attr(dialog, &CALL_ID, NULL);
-    pj_assert(attr);
-    pj_strdup(pool, &attr->value, call_id);
+    if (!attr)
+    {
+        attr = xml_create_attr(pool, &CALL_ID, call_id);
+        pj_xml_add_attr(dialog, attr);
+    }
+    else
+        pj_strdup(pool, &attr->value, call_id);
 }
 
 PJ_DECL(const pj_str_t*) pjdialog_info_dialog_get_remote_tag(const pjdialog_info_dialog *dialog)
@@ -387,8 +393,13 @@ PJ_DECL(void) pjdialog_info_dialog_set_remote_tag(pj_pool_t *pool,
                             const pj_str_t *remote_tag)
 {
     pj_xml_attr *attr = pj_xml_find_attr(dialog, &REMOTE_TAG, NULL);
-    pj_assert(attr);
-    pj_strdup(pool, &attr->value, remote_tag);
+    if (!attr)
+    {
+        attr = xml_create_attr(pool, &REMOTE_TAG, remote_tag);
+        pj_xml_add_attr(dialog, attr);
+    }
+    else
+        pj_strdup(pool, &attr->value, remote_tag);
 }
 
 PJ_DECL(const pj_str_t*) pjdialog_info_dialog_get_local_tag(const pjdialog_info_dialog *dialog)
@@ -404,31 +415,41 @@ PJ_DECL(void) pjdialog_info_dialog_set_local_tag(pj_pool_t *pool,
                             const pj_str_t *local_tag)
 {
     pj_xml_attr *attr = pj_xml_find_attr(dialog, &LOCAL_TAG, NULL);
-    pj_assert(attr);
-    pj_strdup(pool, &attr->value, local_tag);
+    if (!attr)
+    {
+        attr = xml_create_attr(pool, &LOCAL_TAG, local_tag);
+        pj_xml_add_attr(dialog, attr);
+    }
+    else
+        pj_strdup(pool, &attr->value, local_tag);
 }
 
 PJ_DECL(const pj_str_t*) pjdialog_info_dialog_get_direction(const pjdialog_info_dialog *dialog)
 {
     const pj_xml_attr *attr = pj_xml_find_attr((pj_xml_node*)dialog, &DIRECTION, NULL);
-    pj_assert(attr);
-    return &attr->value;
+    if (attr)
+        return &attr->value;
+    return &EMPTY_STRING;
 }
 
-PJ_DECL(void)        pjdialog_info_dialog_set_direction(pj_pool_t *pool,
+PJ_DECL(void) pjdialog_info_dialog_set_direction(pj_pool_t *pool,
                             pjdialog_info_dialog *dialog,
                             const pj_str_t *direction)
 {
     pj_xml_attr *attr = pj_xml_find_attr(dialog, &DIRECTION, NULL);
-    pj_assert(attr);
-    pj_strdup(pool, &attr->value, direction);
+    if (!attr)
+    {
+        attr = xml_create_attr(pool, &DIRECTION, direction);
+        pj_xml_add_attr(dialog, attr);
+    }
+    else
+        pj_strdup(pool, &attr->value, direction);
 }
 
-PJ_DECL(const pj_str_t*)  pjdialog_info_dialog_get_state(pjdialog_info_dialog *dialog)
+PJ_DECL(const pj_str_t*) pjdialog_info_dialog_get_state(pjdialog_info_dialog *dialog)
 {
     pj_xml_node *node = pj_xml_find_node((pj_xml_node*)dialog, &STATE);
-    if (!node)
-        return &EMPTY_STRING;
+    pj_assert(node);
     return &node->content;
 }
 
@@ -471,8 +492,9 @@ PJ_DECL(void) pjdialog_info_dialog_set_duration(pj_pool_t *pool,
 PJ_DECL(pjdialog_info_local*)  pjdialog_info_dialog_get_local(pjdialog_info_dialog *dialog)
 {
     pjdialog_info_local *local = (pjdialog_info_local*)pj_xml_find_node(dialog, &LOCAL);
-    pj_assert(local);
-    return local;
+    if (local)
+        return local;
+    return NULL;
 }
 
 PJ_DECL(pjdialog_info_local*) pjdialog_info_dialog_add_local(pj_pool_t *pool,
@@ -487,9 +509,11 @@ PJ_DECL(pjdialog_info_local*) pjdialog_info_dialog_add_local(pj_pool_t *pool,
 PJ_DECL(pjdialog_info_remote*) pjdialog_info_dialog_get_remote(pjdialog_info_dialog *dialog)
 {
     pjdialog_info_remote *remote = (pjdialog_info_remote*)pj_xml_find_node(dialog, &REMOTE);
-    pj_assert(remote);
-    return remote;
+    if(remote)
+        return remote;
+    return NULL;
 }
+
 PJ_DECL(pjdialog_info_remote*) pjdialog_info_dialog_add_remote(pj_pool_t *pool,
                             pjdialog_info_dialog *dialog)
 {
