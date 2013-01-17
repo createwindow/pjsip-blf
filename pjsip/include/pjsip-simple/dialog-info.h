@@ -105,7 +105,7 @@ typedef struct pjdialog_info_dialog_op
 
 typedef struct pjdialog_info_dialog_info_op
 {
-    void (*construct)(pj_pool_t*, pjdialog_info_dialog_info*, const pj_str_t*, const pj_str_t*);
+    void (*construct)(pj_pool_t*, pjdialog_info_dialog_info*, const pj_str_t*, const pj_str_t*, const pj_str_t*);
 
     const pj_str_t* (*get_state)(const pjdialog_info_dialog_info*);
     void (*set_state)(pj_pool_t *pool, const pjdialog_info_dialog_info*, const pj_str_t*);
@@ -132,7 +132,7 @@ extern struct pjdialog_info_op_desc
 /******************************************************************************
  * Top level API for managing dialog-info document.
  *****************************************************************************/
-PJ_DECL(pjdialog_info_dialog_info*)    pjdialog_info_create(pj_pool_t *pool, const pj_str_t *version, const pj_str_t *state);
+PJ_DECL(pjdialog_info_dialog_info*)    pjdialog_info_create(pj_pool_t *pool, const pj_str_t *version, const pj_str_t *state, const pj_str_t* entity);
 PJ_DECL(pjdialog_info_dialog_info*)    pjdialog_info_parse(pj_pool_t *pool, char *text, int len);
 PJ_DECL(int) pjdialog_info_print(const pjdialog_info_dialog_info* dialog_info, char *buf, int len);
 
@@ -142,7 +142,8 @@ PJ_DECL(int) pjdialog_info_print(const pjdialog_info_dialog_info* dialog_info, c
 PJ_DECL(void)   pjdialog_info_dialog_info_construct(pj_pool_t *pool,
                             pjdialog_info_dialog_info *dialog_info,
                             const pj_str_t *version,
-                            const pj_str_t *state);
+                            const pj_str_t *state,
+                            const pj_str_t* entity);
 
 PJ_DECL(const pj_str_t*)   pjdialog_info_dialog_info_get_state(pjdialog_info_dialog_info *dialog_info);
 PJ_DECL(void)   pjdialog_info_dialog_info_set_state(pj_pool_t *pool,

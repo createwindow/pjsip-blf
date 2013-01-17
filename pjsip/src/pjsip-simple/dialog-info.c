@@ -504,7 +504,8 @@ PJ_DECL(pjdialog_info_remote*) pjdialog_info_dialog_add_remote(pj_pool_t *pool,
 PJ_DECL(void) pjdialog_info_dialog_info_construct(pj_pool_t *pool,
                             pjdialog_info_dialog_info *dialog_info,
                             const pj_str_t *version,
-                            const pj_str_t *state)
+                            const pj_str_t *state,
+                            const pj_str_t* entity)
 {
     pj_xml_attr *attr;
     pjdialog_info_dialog *dialog;
@@ -514,6 +515,9 @@ PJ_DECL(void) pjdialog_info_dialog_info_construct(pj_pool_t *pool,
     pj_xml_add_attr(dialog_info, attr);
 
     attr = xml_create_attr(pool, &STATE, state);
+    pj_xml_add_attr(dialog_info, attr);
+
+    attr = xml_create_attr(pool, &ENTITY, entity);
     pj_xml_add_attr(dialog_info, attr);
 
     dialog = PJ_POOL_ALLOC_T(pool, pjdialog_info_dialog);
@@ -587,10 +591,10 @@ PJ_DECL(pjdialog_info_dialog*) pjdialog_info_dialog_info_add_dialog(pj_pool_t *p
 
 /* Dialog-Info document */
 
-PJ_DEF(pjdialog_info_dialog*) pjdialog_info_create(pj_pool_t *pool, const pj_str_t *version, const pj_str_t *state)
+PJ_DEF(pjdialog_info_dialog*) pjdialog_info_create(pj_pool_t *pool, const pj_str_t *version, const pj_str_t *state, const pj_str_t* entity)
 {
     pjdialog_info_dialog *dialog_info = PJ_POOL_ALLOC_T(pool, pjdialog_info_dialog);
-    pjdialog_info_dialog_info_construct(pool, dialog_info, version, state);
+    pjdialog_info_dialog_info_construct(pool, dialog_info, version, state, entity);
     return dialog_info;
 }
 
