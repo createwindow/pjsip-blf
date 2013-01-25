@@ -3176,7 +3176,7 @@ static void on_buddy_evsub_blf_state(pjsua_buddy_id buddy_id,
 
     PJ_LOG(4,(THIS_FILE,
           "Buddy %d: blf subscription state: %s (event: %s%s)",
-          buddy_id, pjsip_evsub_get_blf_state_name(sub),
+          buddy_id, pjsip_evsub_get_state_name(sub),
           pjsip_event_str(event->type),
           event_info));
 }
@@ -5671,6 +5671,7 @@ pj_status_t app_init(int argc, char *argv[])
     app_config.cfg.cb.on_buddy_state = &on_buddy_state;
     app_config.cfg.cb.on_buddy_blf_state = &on_buddy_blf_state;
     app_config.cfg.cb.on_buddy_evsub_state = &on_buddy_evsub_state;
+    app_config.cfg.cb.on_buddy_evsub_blf_state = &on_buddy_evsub_blf_state;
     app_config.cfg.cb.on_pager = &on_pager;
     app_config.cfg.cb.on_typing = &on_typing;
     app_config.cfg.cb.on_call_transfer_status = &on_call_transfer_status;

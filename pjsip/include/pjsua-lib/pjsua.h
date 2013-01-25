@@ -984,6 +984,9 @@ typedef struct pjsua_callback
 				 pjsip_evsub *sub,
 				 pjsip_event *event);
 
+    void (*on_buddy_evsub_blf_state)(pjsua_buddy_id buddy_id,
+				 pjsip_evsub *sub,
+				 pjsip_event *event);
     /**
      * Notify application on incoming pager (i.e. MESSAGE request).
      * Argument call_id will be -1 if MESSAGE request is not related to an

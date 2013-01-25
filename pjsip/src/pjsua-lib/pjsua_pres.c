@@ -2132,8 +2132,8 @@ static void pjsua_evsub_on_blf_state( pjsip_evsub *sub, pjsip_event *event)
     }
 
     /* Call callbacks */
-    if (pjsua_var.ua_cfg.cb.on_buddy_evsub_state)
-        (*pjsua_var.ua_cfg.cb.on_buddy_evsub_state)(buddy->index, sub,
+    if (pjsua_var.ua_cfg.cb.on_buddy_evsub_blf_state)
+        (*pjsua_var.ua_cfg.cb.on_buddy_evsub_blf_state)(buddy->index, sub,
                             event);
 
     if (pjsua_var.ua_cfg.cb.on_buddy_blf_state)
