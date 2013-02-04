@@ -354,6 +354,12 @@ PJ_DEF(pj_status_t) pjsua_buddy_get_blf_info( pjsua_buddy_id buddy_id,
         total += info->dialog_info_state.slen;
     }
 
+    if (pjsua_var.buddy[buddy_id].blf_status.info[0].dialog_info_version.slen > 0) {
+        info->dialog_info_version.ptr = info->buf_ + total;
+        pj_strncpy(&info->dialog_info_version, &pjsua_var.buddy[buddy_id].blf_status.info[0].dialog_info_version, pjsua_var.buddy[buddy_id].blf_status.info[0].dialog_info_version.slen);
+        total += info->dialog_info_version.slen;
+    }
+
     if (pjsua_var.buddy[buddy_id].blf_status.info[0].dialog_info_entity.slen > 0) {
         info->dialog_info_entity.ptr = info->buf_ + total;
         pj_strncpy(&info->dialog_info_entity, &pjsua_var.buddy[buddy_id].blf_status.info[0].dialog_info_entity, pjsua_var.buddy[buddy_id].blf_status.info[0].dialog_info_entity.slen);

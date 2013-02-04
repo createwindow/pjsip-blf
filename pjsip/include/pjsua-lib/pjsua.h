@@ -4716,6 +4716,9 @@ typedef struct pjsua_buddy_blf_info
     /* BLF Dialog-Info state */
     pj_str_t        dialog_info_state;
 
+    /* BLF Dialog-Info version */
+    pj_str_t        dialog_info_version;
+
     /* BLF Dialog-Info entity */
     pj_str_t        dialog_info_entity;
 

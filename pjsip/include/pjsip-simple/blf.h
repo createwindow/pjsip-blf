@@ -79,6 +79,7 @@ struct pjsip_blf_status
     struct {
 
             pj_str_t   dialog_info_state;       /**< Dialog-Info state              */
+            pj_str_t   dialog_info_version;       /**< Dialog-Info verion              */
             pj_str_t   dialog_info_entity;       /**< Dialog-Info entity              */
             pj_str_t   dialog_call_id;          /**< Dialog's call_id      */
             pj_str_t   dialog_remote_tag;       /**< Dialog's remote-tag      */
