@@ -395,6 +395,10 @@ PJ_DEF(pj_status_t) pjsua_buddy_get_blf_info( pjsua_buddy_id buddy_id,
         pj_strncpy(&info->dialog_state, &pjsua_var.buddy[buddy_id].blf_status.info[0].dialog_state, pjsua_var.buddy[buddy_id].blf_status.info[0].dialog_state.slen);
         total += info->dialog_state.slen;
 
+        info->dialog_state_code.ptr = info->buf_ + total;
+        pj_strncpy(&info->dialog_state_code, &pjsua_var.buddy[buddy_id].blf_status.info[0].dialog_state_code, pjsua_var.buddy[buddy_id].blf_status.info[0].dialog_state_code.slen);
+        total += info->dialog_state_code.slen;
+
         info->dialog_duration.ptr = info->buf_ + total;
         pj_strncpy(&info->dialog_duration, &pjsua_var.buddy[buddy_id].blf_status.info[0].dialog_duration, pjsua_var.buddy[buddy_id].blf_status.info[0].dialog_duration.slen);
         total += info->dialog_duration.slen;

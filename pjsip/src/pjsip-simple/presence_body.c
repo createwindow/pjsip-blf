@@ -289,6 +289,7 @@ PJ_DEF(pj_status_t) pjsip_blf_parse_dialog_info2(char *body, unsigned body_len,
         pj_strdup(pool, &blf_status->info[blf_status->info_cnt].dialog_local_tag, pjdialog_info_dialog_get_local_tag(dialog));
         pj_strdup(pool, &blf_status->info[blf_status->info_cnt].dialog_direction, pjdialog_info_dialog_get_direction(dialog));
         pj_strdup(pool, &blf_status->info[blf_status->info_cnt].dialog_state, pjdialog_info_dialog_get_state(dialog));
+        pj_strdup(pool, &blf_status->info[blf_status->info_cnt].dialog_state_code, pjdialog_info_dialog_get_state_code(dialog));
         pj_strdup(pool, &blf_status->info[blf_status->info_cnt].dialog_duration, pjdialog_info_dialog_get_duration(dialog));
 
         pjdialog_info_local * local =pjdialog_info_dialog_get_local(dialog);

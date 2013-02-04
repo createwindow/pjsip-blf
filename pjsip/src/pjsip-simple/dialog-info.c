@@ -48,6 +48,8 @@ struct pjdialog_info_op_desc pjdialog_info_op =
     &pjdialog_info_dialog_set_direction,
     &pjdialog_info_dialog_get_state,
     &pjdialog_info_dialog_set_state,
+    &pjdialog_info_dialog_get_state_code,
+    &pjdialog_info_dialog_set_state_code,
     &pjdialog_info_dialog_get_duration,
     &pjdialog_info_dialog_set_duration,
     &pjdialog_info_dialog_get_local,
@@ -79,6 +81,7 @@ static pj_str_t DIALOG_INFO = { "dialog-info", 11 };
 static pj_str_t VERSION = { "version", 7 };
 static pj_str_t DIALOG = { "dialog", 6};
 static pj_str_t STATE = { "state", 5 };
+static pj_str_t CODE = { "code", 4 };
 static pj_str_t DURATION = { "duration", 8 };
 static pj_str_t ID = { "id", 2 };
 static pj_str_t LOCAL = { "local", 5 };
@@ -465,6 +468,32 @@ PJ_DECL(void) pjdialog_info_dialog_set_state(pj_pool_t *pool,
     } else {
         pj_strdup(pool, &node->content, state);
     }
+}
+
+PJ_DECL(const pj_str_t*) pjdialog_info_dialog_get_state_code(pjdialog_info_dialog *dialog)
+{
+    pj_xml_node *node = pj_xml_find_node((pj_xml_node*)dialog, &STATE);
+    pj_assert(node);
+    const pj_xml_attr *attr = pj_xml_find_attr((pj_xml_node*)node, &CODE, NULL);
+    if (attr)
+        return &attr->value;
+    return &EMPTY_STRING;
+}
+
+PJ_DECL(void) pjdialog_info_dialog_set_state_code(pj_pool_t *pool,
+                            pjdialog_info_dialog *dialog,
+                            const pj_str_t *state_code)
+{
+    pj_xml_node *node = pj_xml_find_node((pj_xml_node*)dialog, &STATE);
+    pj_assert(node);
+    pj_xml_attr *attr = pj_xml_find_attr(node, &CODE, NULL);
+    if (!attr)
+    {
+        attr = xml_create_attr(pool, &CODE, state_code);
+        pj_xml_add_attr(node, attr);
+    }
+    else
+        pj_strdup(pool, &attr->value, state_code);
 }
 
 PJ_DECL(const pj_str_t*)  pjdialog_info_dialog_get_duration(pjdialog_info_dialog *dialog)

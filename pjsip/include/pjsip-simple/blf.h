@@ -87,6 +87,7 @@ struct pjsip_blf_status
             pj_str_t   dialog_direction;        /**< Dialog's direction      */
             pj_str_t   dialog_id;               /**< Dialog's id      */
             pj_str_t   dialog_state;            /**< Dialog state              */
+            pj_str_t   dialog_state_code;       /**< Dialog state code              */
             pj_str_t   dialog_duration;         /**< Dialog duration      */
 
             pj_xml_node    *dialog_node;             /**< Pointer to tuple XML node of

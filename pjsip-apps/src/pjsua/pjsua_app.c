@@ -3091,9 +3091,10 @@ static void on_buddy_blf_state(pjsua_buddy_id buddy_id)
     PJ_LOG(3,(THIS_FILE, "%.*s dialog-info-state: %.*s, dialog-info-version: %.*s, "
             "dialog-info-entity: %.*s, dialog-id: %.*s, dialog-call-id: %.*s, "
             "dialog-remote-tag: %.*s, dialog-local-tag: %.*s, dialog-direction: %.*s, "
-            "dialog-state: %.*s, dialog-duration: %.*s, local-identity: %.*s, "
-            "local-target-uri: %.*s, remote-identity: %.*s, remote-target-uri: %.*s, "
-            "subscription blf state: %s, (last termination reason code=%d %.*s)",
+            "dialog-state: %.*s, dialog-state-code: %.*s, dialog-duration: %.*s, "
+            "local-identity: %.*s, local-target-uri: %.*s, remote-identity: %.*s, "
+            "remote-target-uri: %.*s, subscription blf state: %s, (last termination "
+            "reason code=%d %.*s)",
           (int)info.uri.slen,
           info.uri.ptr,
           (int)info.dialog_info_state.slen,
@@ -3114,6 +3115,8 @@ static void on_buddy_blf_state(pjsua_buddy_id buddy_id)
           info.dialog_direction.ptr,
           (int)info.dialog_state.slen,
           info.dialog_state.ptr,
+          (int)info.dialog_state_code.slen,
+          info.dialog_state_code.ptr,
           (int)info.dialog_duration.slen,
           info.dialog_duration.ptr,
           (int)info.local_identity.slen,

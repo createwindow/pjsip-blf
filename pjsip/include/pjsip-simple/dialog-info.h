@@ -93,6 +93,9 @@ typedef struct pjdialog_info_dialog_op
     const pj_str_t* (*get_state)(const pjdialog_info_dialog*);
     void (*set_state)(pj_pool_t *pool, const pjdialog_info_dialog*, const pj_str_t*);
 
+    const pj_str_t* (*get_state_code)(const pjdialog_info_dialog*);
+    void (*set_state_code)(pj_pool_t *pool, const pjdialog_info_dialog*, const pj_str_t*);
+
     const pj_str_t* (*get_duration)(const pjdialog_info_dialog*);
     void (*set_duration)(pj_pool_t *pool, const pjdialog_info_dialog*, const pj_str_t*);
 
@@ -202,6 +205,11 @@ PJ_DECL(const pj_str_t*)  pjdialog_info_dialog_get_state(pjdialog_info_dialog *d
 PJ_DECL(void)        pjdialog_info_dialog_set_state(pj_pool_t *pool,
                             pjdialog_info_dialog *dialog,
                             const pj_str_t *state);
+
+PJ_DECL(const pj_str_t*)  pjdialog_info_dialog_get_state_code(pjdialog_info_dialog *dialog);
+PJ_DECL(void)        pjdialog_info_dialog_set_state_code(pj_pool_t *pool,
+                            pjdialog_info_dialog *dialog,
+                            const pj_str_t *state_code);
 
 PJ_DECL(const pj_str_t*)  pjdialog_info_dialog_get_duration(pjdialog_info_dialog *dialog);
 PJ_DECL(void)        pjdialog_info_dialog_set_duration(pj_pool_t *pool,
