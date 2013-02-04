@@ -276,6 +276,7 @@ PJ_DEF(pj_status_t) pjsip_blf_parse_dialog_info2(char *body, unsigned body_len,
 
     dialog = pjdialog_info_dialog_info_get_dialog(dialog_info);
     pj_strdup(pool, &blf_status->info[blf_status->info_cnt].dialog_info_entity, pjdialog_info_dialog_info_get_entity(dialog_info));
+    pj_strdup(pool, &blf_status->info[blf_status->info_cnt].dialog_info_state, pjdialog_info_dialog_info_get_state(dialog_info));
     
     if (dialog)
     {
